@@ -16,6 +16,11 @@ steps:
 #    - yarn install
 #    - yarn test
 
+  - name: local
+    image: plugins/docker
+    commands:
+      - echo 'hello world'
+
   - name: build server (dry run)
     image: plugins/docker
     settings:

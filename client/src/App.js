@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import TextField from '@material-ui/core/TextField'
-// import Button from '@material-ui/core/Button'
 import BuildEnv from './buildEnv.js'
 import ResultsDataTable from './ResultsDataTable.js'
 import Autocomplete from '@mui/material/Autocomplete'
@@ -94,45 +93,13 @@ function App() {
       </AppBar>
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <Card>
+          <Card raised={true}>
             <CardContent>
-              <p>
-                <Autocomplete
-                  sx={{ width: 0.2 }}
-                  value={selectedCuisine}
-                  options={cuisines}
-                  getOptionLabel={(option) => option.value ?? ''}
-                  isOptionEqualToValue={(option, value) =>
-                    option.id === value.id
-                  }
-                  onChange={(_event, selected) => {
-                    setSelectedCuisine(selected)
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} variant="outlined" label="Cuisine" />
-                  )}
-                />
-              </p>
-              <p>
-                <Autocomplete
-                  sx={{ width: 0.2 }}
-                  value={selectedBorough}
-                  options={boroughs}
-                  getOptionLabel={(option) => option.value ?? ''}
-                  isOptionEqualToValue={(option, value) =>
-                    option.id === value.id
-                  }
-                  onChange={(_event, selected) => {
-                    setSelectedBorough(selected)
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} variant="outlined" label="Borough" />
-                  )}
-                />
-              </p>
-
+              <Typography gutterBottom variant="h5" component="div">
+                Type-Ahead Search
+              </Typography>
               <Autocomplete
-                sx={{ width: 0.4 }}
+                sx={{ width: '100%' }}
                 freeSolo
                 filterOptions={(x) => x}
                 getOptionLabel={(option) => option.name ?? ''}
@@ -163,12 +130,61 @@ function App() {
           </Card>
         </Grid>
         <Grid item xs={6}>
-          <Card>
+          <Card raised={true}>
             <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Facets
-              </Typography>
-              <FacetChips facets={facetResults} />
+              <Grid container item spacing={3}>
+                <Grid item xs={6}>
+                  <Autocomplete
+                    sx={{ width: 1 }}
+                    value={selectedCuisine}
+                    options={cuisines}
+                    getOptionLabel={(option) => option.value ?? ''}
+                    isOptionEqualToValue={(option, value) =>
+                      option.id === value.id
+                    }
+                    onChange={(_event, selected) => {
+                      setSelectedCuisine(selected)
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        label="Cuisine"
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Autocomplete
+                    sx={{ width: 1 }}
+                    value={selectedBorough}
+                    options={boroughs}
+                    getOptionLabel={(option) => option.value ?? ''}
+                    isOptionEqualToValue={(option, value) =>
+                      option.id === value.id
+                    }
+                    onChange={(_event, selected) => {
+                      setSelectedBorough(selected)
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        label="Borough"
+                      />
+                    )}
+                  />
+                </Grid>
+              </Grid>
+
+              <Card>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    Buckets
+                  </Typography>
+                  <FacetChips facets={facetResults} />
+                </CardContent>
+              </Card>
             </CardContent>
           </Card>
         </Grid>
