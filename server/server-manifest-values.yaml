@@ -1,0 +1,4 @@
+atlas_uri: <+secrets.getValue("atlas_uri")>
+server_image: <+artifact.image>
+deployment_replicas: 1
+container_port: 5001
