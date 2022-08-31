@@ -11,6 +11,16 @@ import Autocomplete from '@mui/material/Autocomplete'
 import FacetChips from './FacetChips'
 import Grid from '@mui/material/Grid'
 import './App.css'
+import { createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@material-ui/styles'
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1B2E49'
+    },
+  },
+});
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -83,6 +93,7 @@ function App() {
   }, [setCuisines])
 
   return (
+    <ThemeProvider theme={theme}>
     <div className="App">
       <AppBar color="primary" position="static">
         <Toolbar>
@@ -195,7 +206,8 @@ function App() {
           <ResultsDataTable results={selectedResult}></ResultsDataTable>
         </CardContent>
       </Card>
-    </div>
+      </div>
+      </ThemeProvider>
   )
 }
 
