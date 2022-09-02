@@ -1,0 +1,33 @@
+kind: pipeline
+type: docker
+name: Build and Deploy Restaurant Search App Locally
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+  - name: Build Server Docker Image and start it
+    image: docker
+    volumes:
+    - name: dockerSocket
+      path: /var/run/docker.sock
+    commands:
+      - cd server
+      - docker buildx build --load -t mern-stack-server:latest .
+      - docker run -p 5001:5001 -d mern-stack-server:latest
+
+  - name: Build Client Docker Image and start it
+    image: docker
+    volumes:
+    - name: dockerSocket
+      path: /var/run/docker.sock
+    commands:
+      - cd client
+      - docker buildx build --load -t mern-stack-client:latest -f Dockerfile-local .
+      - docker run -p 3000:80 -d mern-stack-client:latest 
+
+volumes:
+  - name: dockerSocket
+    host:
+      path: /var/run/docker.sock

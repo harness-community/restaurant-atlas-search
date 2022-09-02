@@ -22,7 +22,7 @@ fastify.register(autoLoad, {
 })
 fastify.register(cors, {})
 
-const server = async () => {
+export default async function server() {
   const port = process.env.PORT || 5001
   try {
     await fastify.listen(port, '0.0.0.0')

@@ -12,6 +12,7 @@ ADD src /app/src
 ARG SERVER_URI
 
 # replace server address:port
+RUN echo $SERVER_URI
 RUN sed -i "s,http://localhost:5001,$SERVER_URI,g" src/buildEnv.js
 
 RUN yarn build
