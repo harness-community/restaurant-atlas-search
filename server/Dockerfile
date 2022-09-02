@@ -5,7 +5,6 @@ WORKDIR /app
 COPY package.json ./
 COPY server.js ./
 COPY yarn.lock ./
-COPY .env ./
 
 ADD controllers /app/controllers
 ADD db /app/db
