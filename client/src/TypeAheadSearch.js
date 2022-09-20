@@ -1,33 +1,41 @@
 import React from 'react'
-import { Autocomplete } from '@mui/material'
-import { TextField } from '@material-ui/core'
+import { Autocomplete, TextField } from '@mui/material'
 import BuildEnv from './buildEnv.js'
 import { debounce } from 'lodash'
 
 const TypeAheadSearch = (props) => {
   const setCuisines = props.setCuisines
+  const setResults = props.setResults
+  const setFacetResults = props.setFacetResults
+  const selectedCuisine = props.selectedCuisine
+  const selectedBorough = props.selectedBorough
+  const setSearchTerm = props.setSearchTerm
+  const setBoroughs = props.setBoroughs
 
-  const fetchResults = React.useCallback(async (searchTerm) => {
-    try {
-      const searchResults = await fetch(
-        `${BuildEnv()}/restaurant/search/${searchTerm}`
-      )
-      props.setResults(await searchResults.json())
-      const activeCuisineFacet = props.selectedCuisine.value
-        ? props.selectedCuisine.value
-        : '*'
-      const activeBoroughFacet = props.selectedBorough.value
-        ? props.selectedBorough.value
-        : '*'
-      const query = `${BuildEnv()}/restaurant/facet/${searchTerm}/${activeCuisineFacet}/${activeBoroughFacet}`
-      const fetchFacetResults = await fetch(query)
-      const facetResultJson = await fetchFacetResults.json()
-      props.setFacetResults(facetResultJson[0])
-    } catch (err) {
-      props.setResults([])
-      props.setFacetResults([])
-    }
-  }, [])
+  const fetchResults = React.useCallback(
+    async (searchTerm) => {
+      try {
+        const searchResults = await fetch(
+          `${BuildEnv()}/restaurant/search/${searchTerm}`
+        )
+        setResults(await searchResults.json())
+        const activeCuisineFacet = selectedCuisine.value
+          ? selectedCuisine.value
+          : '*'
+        const activeBoroughFacet = selectedBorough.value
+          ? selectedBorough.value
+          : '*'
+        const query = `${BuildEnv()}/restaurant/facet/${searchTerm}/${activeCuisineFacet}/${activeBoroughFacet}`
+        const fetchFacetResults = await fetch(query)
+        const facetResultJson = await fetchFacetResults.json()
+        setFacetResults(facetResultJson[0])
+      } catch (err) {
+        setResults([])
+        setFacetResults([])
+      }
+    },
+    [selectedBorough, selectedCuisine, setFacetResults, setResults]
+  )
 
   const debouncedSearch = React.useMemo(
     () =>
@@ -39,10 +47,10 @@ const TypeAheadSearch = (props) => {
 
   const handleSearchTermChange = React.useCallback(
     (event) => {
-      props.setSearchTerm(event.target.value)
+      setSearchTerm(event.target.value)
       debouncedSearch(event.target.value)
     },
-    [debouncedSearch]
+    [debouncedSearch, setSearchTerm]
   )
 
   React.useEffect(() => {
@@ -65,18 +73,20 @@ const TypeAheadSearch = (props) => {
       const optionsObject = apiResults.map((b) => {
         return { label: b, value: b }
       })
-      props.setBoroughs(await optionsObject)
+      setBoroughs(await optionsObject)
     }
 
     fetchCuisineFacets()
     fetchBoroughFacets()
-  }, [setCuisines])
+  }, [setCuisines, setBoroughs])
 
   return (
     <Autocomplete
-      // sx={{ width: '100%' }}
+      sx={{
+        pt: '25px'
+      }}
       freeSolo
-      // loading
+      loading
       autoSelect
       filterOptions={(x) => x}
       getOptionLabel={(option) => option.name ?? ''}
@@ -98,6 +108,7 @@ const TypeAheadSearch = (props) => {
           // onChange={fetchSearchResultsFromBackend}
           onChange={handleSearchTermChange}
           type="search"
+          variant="outlined"
           label="Type-Ahead Restaurant Search"
           InputProps={{
             ...params.InputProps,

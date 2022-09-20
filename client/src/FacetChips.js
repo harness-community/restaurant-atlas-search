@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import Chip from '@material-ui/core/Chip'
-import LocationCity from '@material-ui/icons/LocationCity'
+import { Chip, Box } from '@mui/material'
+import LocationCity from '@mui/icons-material/LocationCity'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 
 export default class FacetChips extends Component {
@@ -24,11 +24,22 @@ export default class FacetChips extends Component {
         }
       }
       return (
-        <div>
+        <Box
+          sx={{
+            pt: 2
+          }}
+          className="foo"
+        >
           {facets.map((facet) => (
-            <Chip key={facet.key} icon={facet.icon} label={facet.label} />
+            <Chip
+              key={facet.key}
+              icon={facet.icon}
+              label={facet.label}
+              size="small"
+              color="secondary"
+            />
           ))}
-        </div>
+        </Box>
       )
     }
   }

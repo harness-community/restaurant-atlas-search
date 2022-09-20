@@ -13,8 +13,12 @@
   }
 }
 
+.map {
+  height: 440px;
+}
+
 .App-header {
-  background-color: #1B2E49;
+  background-color: #1b2e49;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

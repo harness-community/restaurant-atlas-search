@@ -3,28 +3,19 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  Card,
   Paper,
-  CardContent,
-  TextField,
   Box,
   Container
-} from '@material-ui/core'
+} from '@mui/material'
 import ResultsDataTable from './ResultsDataTable.js'
-import { Grid, Autocomplete } from '@mui/material'
+import { Grid } from '@mui/material'
 import FacetChips from './FacetChips'
 import './App.css'
-import { createTheme } from '@mui/material/styles'
-import { ThemeProvider } from '@material-ui/styles'
+import { ThemeProvider } from '@mui/material/styles'
 import TypeAheadSearch from './TypeAheadSearch.js'
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1B2E49'
-    }
-  }
-})
+import FacetAutocomplete from './FacetAutocomplete.js'
+import theme from './CustomTheme.js'
+import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -39,7 +30,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-        <AppBar color="primary" position="static">
+        {/* header */}
+        <AppBar color="primary" position="sticky">
           <Toolbar>
             <Typography variant="h3" color="inherit">
               NYC Restaurant Search
@@ -48,98 +40,64 @@ function App() {
         </AppBar>
 
         <Container maxWidth="lg">
-          <Box
-            sx={{
-              paddingTop: 25
-            }}
-          >
+          <Box>
             {/* Search Fields */}
-            <Grid container spacing={0}>
-              <Grid item xs={12}>
-                <TypeAheadSearch
-                  results={results}
-                  setResults={setResults}
-                  selectedCuisine={selectedCuisine}
-                  selectedBorough={selectedBorough}
-                  setFacetResults={setFacetResults}
-                  setSelectedResult={setSelectedResult}
-                  setSearchTerm={setSearchTerm}
-                  setBoroughs={setBoroughs}
-                  setCuisines={setCuisines}
-                ></TypeAheadSearch>
+            <TypeAheadSearch
+              results={results}
+              setResults={setResults}
+              selectedCuisine={selectedCuisine}
+              selectedBorough={selectedBorough}
+              setFacetResults={setFacetResults}
+              setSelectedResult={setSelectedResult}
+              setSearchTerm={setSearchTerm}
+              setBoroughs={setBoroughs}
+              setCuisines={setCuisines}
+            ></TypeAheadSearch>
+
+            {/* Facets */}
+            <Grid container sx={{ pt: 2 }}>
+              <Grid item xs={6}>
+                <Paper elevation={0}>
+                  {/* Cuisine Facet */}
+                  <FacetAutocomplete
+                    selected={selectedCuisine}
+                    options={cuisines}
+                    setter={setSelectedCuisine}
+                    label="Cuisine"
+                  ></FacetAutocomplete>
+                </Paper>
+              </Grid>
+              <Grid item xs={6}>
+                <Paper elevation={0}>
+                  {/* Borough facet */}
+                  <FacetAutocomplete
+                    selected={selectedBorough}
+                    options={boroughs}
+                    setter={setSelectedBorough}
+                    label="Borough"
+                  ></FacetAutocomplete>
+                </Paper>
               </Grid>
             </Grid>
-            {/* Buckets */}
-            <Box
-              sx={{
-                paddingTop: 20
-              }}
+            <FacetChips facets={facetResults} />
+            <ResultsDataTable results={results}></ResultsDataTable>
+            <MapContainer
+              center={[51.505, -0.09]}
+              zoom={13}
+              size={500}
+              scrollWheelZoom={false}
+              // placeholder={<MapPlaceholder />}
             >
-              {/* Cuisine facet */}
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <Paper elevation={0}>
-                    <Autocomplete
-                      sx={{ width: 1 }}
-                      value={selectedCuisine}
-                      options={cuisines}
-                      getOptionLabel={(option) => option.value ?? ''}
-                      isOptionEqualToValue={(option, value) =>
-                        option.id === value.id
-                      }
-                      onChange={(_event, selected) => {
-                        setSelectedCuisine(selected)
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          label="Cuisine"
-                        />
-                      )}
-                    />
-                  </Paper>
-                </Grid>
-                {/* Borough facet */}
-                <Grid item xs={6}>
-                  <Paper elevation={0}>
-                    <Autocomplete
-                      sx={{ width: 1 }}
-                      value={selectedBorough}
-                      options={boroughs}
-                      getOptionLabel={(option) => option.value ?? ''}
-                      isOptionEqualToValue={(option, value) =>
-                        option.id === value.id
-                      }
-                      onChange={(_event, selected) => {
-                        setSelectedBorough(selected)
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          label="Borough"
-                        />
-                      )}
-                    />
-                  </Paper>
-                </Grid>
-              </Grid>
-            </Box>
-            <Grid container spacing={0} justifyContent="flex-start">
-              <Typography variant="h5" component="div">
-                Buckets
-              </Typography>
-            </Grid>
-            <Grid container spacing={0} justifyContent="space-between">
-              <FacetChips facets={facetResults} />
-            </Grid>
-            {/* Results */}
-            <Card>
-              <CardContent>
-                <ResultsDataTable results={results}></ResultsDataTable>
-              </CardContent>
-            </Card>
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={[51.505, -0.09]}>
+                <Popup>
+                  A pretty CSS3 popup. <br /> Easily customizable.
+                </Popup>
+              </Marker>
+            </MapContainer>
           </Box>
         </Container>
       </div>
