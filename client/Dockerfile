@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package.json .
 COPY yarn.lock .
-RUN yarn install --production
+RUN pwd && yarn install --production
 
 ADD public /app/public
 ADD src /app/src

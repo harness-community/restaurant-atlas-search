@@ -30,50 +30,58 @@ export default class ResultsDataTable extends React.Component {
   }))
 
   render() {
-    return (
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <this.StyledTableCell>Restaurant</this.StyledTableCell>
-              <this.StyledTableCell align="right">Cuisine</this.StyledTableCell>
-              <this.StyledTableCell align="right">
-                Average Grade
-              </this.StyledTableCell>
-              <this.StyledTableCell align="right">Address</this.StyledTableCell>
-              <this.StyledTableCell align="right">Borough</this.StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {this.props.results.map((row) => (
-              <this.StyledTableRow key={row._id}>
-                <this.StyledTableCell component="th" scope="row">
-                  {row.name}
+    if (this.props.results && this.props.results[0]) {
+      return (
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <this.StyledTableCell>Restaurant</this.StyledTableCell>
+                <this.StyledTableCell align="right">
+                  Cuisine
                 </this.StyledTableCell>
                 <this.StyledTableCell align="right">
-                  {row.cuisine}
+                  Average Grade
                 </this.StyledTableCell>
                 <this.StyledTableCell align="right">
-                  {row.avgScoreLetter}
+                  Address
                 </this.StyledTableCell>
                 <this.StyledTableCell align="right">
-                  {row.address.building +
-                    ' ' +
-                    row.address.street +
-                    ' ' +
-                    row.address.zipcode +
-                    ' (' +
-                    row.borough +
-                    ')'}
+                  Borough
                 </this.StyledTableCell>
-                <this.StyledTableCell align="right">
-                  {row.borough}
-                </this.StyledTableCell>
-              </this.StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    )
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.props.results.map((row) => (
+                <this.StyledTableRow key={row._id}>
+                  <this.StyledTableCell component="th" scope="row">
+                    {row.name}
+                  </this.StyledTableCell>
+                  <this.StyledTableCell align="right">
+                    {row.cuisine}
+                  </this.StyledTableCell>
+                  <this.StyledTableCell align="right">
+                    {row.avgScoreLetter}
+                  </this.StyledTableCell>
+                  <this.StyledTableCell align="right">
+                    {row.address.building +
+                      ' ' +
+                      row.address.street +
+                      ' ' +
+                      row.address.zipcode +
+                      ' (' +
+                      row.borough +
+                      ')'}
+                  </this.StyledTableCell>
+                  <this.StyledTableCell align="right">
+                    {row.borough}
+                  </this.StyledTableCell>
+                </this.StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )
+    }
   }
 }
