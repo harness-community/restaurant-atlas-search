@@ -55,7 +55,7 @@ function App() {
             ></TypeAheadSearch>
 
             {/* Facets */}
-            <Grid container sx={{ pt: 2 }}>
+            <Grid container sx={{ pt: 2 }} spacing={2}>
               <Grid item xs={6}>
                 <Paper elevation={0}>
                   {/* Cuisine Facet */}

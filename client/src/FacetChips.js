@@ -4,6 +4,10 @@ import LocationCity from '@mui/icons-material/LocationCity'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 
 export default class FacetChips extends Component {
+  handleFacetClick = (event) => {
+    console.log('handleFacetClick', event)
+  }
+
   render() {
     if (this.props.facets.facet) {
       let facets = []
@@ -26,12 +30,13 @@ export default class FacetChips extends Component {
       return (
         <Box
           sx={{
-            pt: 2
+            pt: 2,
+            justifyContent: 'flex-end'
           }}
-          className="foo"
         >
           {facets.map((facet) => (
             <Chip
+              onClick={this.handleFacetClick}
               key={facet.key}
               icon={facet.icon}
               label={facet.label}
