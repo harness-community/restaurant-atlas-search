@@ -11,7 +11,7 @@ import Paper from '@mui/material/Paper'
 export default class ResultsDataTable extends React.Component {
   StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
+      backgroundColor: '#1B2E49',
       color: theme.palette.common.white
     },
     [`&.${tableCellClasses.body}`]: {
