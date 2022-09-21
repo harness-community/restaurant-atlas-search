@@ -7,6 +7,10 @@ dbConnection.connect(process.env.ATLAS_URI, {
   useUnifiedTopology: true
 })
 
+dbConnection.set('debug', function (collectionName, method, query, doc) {
+  console.debug("Query: " + JSON.stringify(query))
+})
+
 const db = dbConnection.connection
 
 db.once('open', (_) => {

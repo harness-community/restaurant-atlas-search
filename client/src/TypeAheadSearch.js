@@ -2,6 +2,7 @@ import React from 'react'
 import { Autocomplete, TextField } from '@mui/material'
 import BuildEnv from './buildEnv.js'
 import { debounce } from 'lodash'
+import { calculateActiveFacetValue } from './utils.js'
 
 const TypeAheadSearch = (props) => {
   const setCuisines = props.setCuisines
@@ -11,21 +12,25 @@ const TypeAheadSearch = (props) => {
   const selectedBorough = props.selectedBorough
   const setSearchTerm = props.setSearchTerm
   const setBoroughs = props.setBoroughs
+  const searchTerm = props.searchTerm
+  const setSelectedCuisine = props.setSelectedCuisine
+  const setSelectedBorough = props.setSelectedBorough
+  // const selectedResult = props.selectedResult
 
   const fetchResults = React.useCallback(
     async (searchTerm) => {
       try {
-        const searchResults = await fetch(
-          `${BuildEnv()}/restaurant/search/${searchTerm}`
-        )
-        setResults(await searchResults.json())
-        const activeCuisineFacet = selectedCuisine.value
-          ? selectedCuisine.value
-          : '*'
-        const activeBoroughFacet = selectedBorough.value
-          ? selectedBorough.value
-          : '*'
-        const query = `${BuildEnv()}/restaurant/facet/${searchTerm}/${activeCuisineFacet}/${activeBoroughFacet}`
+        if (searchTerm && searchTerm.length > 0) {
+          const searchResults = await fetch(
+            `${BuildEnv()}/restaurant/search/${searchTerm}`
+          )
+          setResults(await searchResults.json())
+        }
+
+        const activeCuisineFacet = calculateActiveFacetValue(selectedCuisine)
+        const activeBoroughFacet = calculateActiveFacetValue(selectedBorough)
+        const activeSearchTerm = searchTerm ? searchTerm : '*'
+        const query = `${BuildEnv()}/restaurant/facet/${activeSearchTerm}/${activeCuisineFacet}/${activeBoroughFacet}`
         const fetchFacetResults = await fetch(query)
         const facetResultJson = await fetchFacetResults.json()
         setFacetResults(facetResultJson[0])
@@ -80,6 +85,21 @@ const TypeAheadSearch = (props) => {
     fetchBoroughFacets()
   }, [setCuisines, setBoroughs])
 
+  React.useEffect(() => {
+    console.log('TypeAheadSearch.js useEffect triggered ' + selectedCuisine)
+    setSelectedCuisine(selectedCuisine)
+    setSelectedBorough(selectedBorough)
+    debouncedSearch(searchTerm)
+  }, [
+    selectedCuisine,
+    selectedBorough,
+    fetchResults,
+    searchTerm,
+    debouncedSearch,
+    setSelectedCuisine,
+    setSelectedBorough
+  ])
+
   return (
     <Autocomplete
       sx={{
@@ -87,7 +107,7 @@ const TypeAheadSearch = (props) => {
       }}
       freeSolo
       loading
-      autoSelect
+      // autoSelect
       filterOptions={(x) => x}
       getOptionLabel={(option) => option.name ?? ''}
       options={props.results}
@@ -95,6 +115,7 @@ const TypeAheadSearch = (props) => {
       onChange={(_event, selected) => {
         props.setSelectedResult([selected])
       }}
+      isOptionEqualToValue={(option, value) => true}
       renderOption={(props, option) => {
         return (
           <li {...props} key={option._id}>

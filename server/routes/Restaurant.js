@@ -20,6 +20,7 @@ export default async function routes(fastify, options) {
   fastify.get(
     '/restaurant/facet/:term/:cuisine/:borough',
     async (request, reply) => {
+      console.debug("executing getFacetedSearchResults")
       return await restaurantController.getFacetedSearchResults(request, reply)
     }
   )

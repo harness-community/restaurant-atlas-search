@@ -15,7 +15,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import TypeAheadSearch from './TypeAheadSearch.js'
 import FacetAutocomplete from './FacetAutocomplete.js'
 import theme from './CustomTheme.js'
-import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -26,6 +26,10 @@ function App() {
   const [boroughs, setBoroughs] = useState([])
   const [selectedBorough, setSelectedBorough] = useState([])
   const [facetResults, setFacetResults] = useState([])
+
+  React.useEffect(() => {
+    console.log('App.js useEffect triggered ' + selectedCuisine)
+  })
 
   return (
     <ThemeProvider theme={theme}>
@@ -52,6 +56,10 @@ function App() {
               setSearchTerm={setSearchTerm}
               setBoroughs={setBoroughs}
               setCuisines={setCuisines}
+              searchTerm={searchTerm}
+              setSelectedCuisine={setSelectedCuisine}
+              setSelectedBorough={setSelectedBorough}
+              // selectedResult={selectedResult}
             ></TypeAheadSearch>
 
             {/* Facets */}
@@ -79,7 +87,11 @@ function App() {
                 </Paper>
               </Grid>
             </Grid>
-            <FacetChips facets={facetResults} />
+            <FacetChips
+              facets={facetResults}
+              cuisineFacetSetter={setSelectedCuisine}
+              boroughFacetSetter={setSelectedBorough}
+            />
             <ResultsDataTable results={results}></ResultsDataTable>
             <MapContainer
               center={[51.505, -0.09]}
