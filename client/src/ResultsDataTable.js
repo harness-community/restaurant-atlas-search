@@ -47,7 +47,7 @@ export default class ResultsDataTable extends React.Component {
             <table>
               <tbody>
                 <tr>
-                  <td>
+                  <td colSpan={2}>
                     <h3>{result.name}</h3>
                   </td>
                 </tr>

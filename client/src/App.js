@@ -15,7 +15,6 @@ import { ThemeProvider } from '@mui/material/styles'
 import TypeAheadSearch from './TypeAheadSearch.js'
 import FacetAutocomplete from './FacetAutocomplete.js'
 import theme from './CustomTheme.js'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -93,23 +92,6 @@ function App() {
               boroughFacetSetter={setSelectedBorough}
             />
             <ResultsDataTable results={results}></ResultsDataTable>
-            <MapContainer
-              center={[51.505, -0.09]}
-              zoom={13}
-              size={500}
-              scrollWheelZoom={false}
-              // placeholder={<MapPlaceholder />}
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <Marker position={[51.505, -0.09]}>
-                <Popup>
-                  A pretty CSS3 popup. <br /> Easily customizable.
-                </Popup>
-              </Marker>
-            </MapContainer>
           </Box>
         </Container>
       </div>

@@ -1,7 +1,6 @@
 import React from 'react'
 import { Autocomplete } from '@mui/material'
 import { TextField } from '@mui/material'
-import { calculateActiveFacetValue } from './utils'
 
 const FacetAutocomplete = (props) => {
   const pickOptionLabel = (option) => {
