@@ -20,17 +20,19 @@ const TypeAheadSearch = (props) => {
   const fetchResults = React.useCallback(
     async (searchTerm) => {
       try {
-        if (searchTerm && searchTerm.length > 0) {
-          const searchResults = await fetch(
-            `${BuildEnv()}/restaurant/search/${searchTerm}`
-          )
-          setResults(await searchResults.json())
-        }
-
+        const activeSearchTerm = searchTerm ? searchTerm : '*'
         const activeCuisineFacet = calculateActiveFacetValue(selectedCuisine)
         const activeBoroughFacet = calculateActiveFacetValue(selectedBorough)
-        const activeSearchTerm = searchTerm ? searchTerm : '*'
+        if (searchTerm && searchTerm.length > 0) {
+          const searchResults = await fetch(
+            `${BuildEnv()}/facetSearch/facet/${activeSearchTerm}/${activeCuisineFacet}/${activeBoroughFacet}`
+          )
+          const searchResultsJson = await searchResults.json()
+          setResults(searchResultsJson)
+        }
+
         const query = `${BuildEnv()}/restaurant/facet/${activeSearchTerm}/${activeCuisineFacet}/${activeBoroughFacet}`
+        // const query = `${BuildEnv()}/facetSearch/facet/${activeSearchTerm}/${activeCuisineFacet}/${activeBoroughFacet}`
         const fetchFacetResults = await fetch(query)
         const facetResultJson = await fetchFacetResults.json()
         setFacetResults(facetResultJson[0])
@@ -86,7 +88,6 @@ const TypeAheadSearch = (props) => {
   }, [setCuisines, setBoroughs])
 
   React.useEffect(() => {
-    console.log('TypeAheadSearch.js useEffect triggered ' + selectedCuisine)
     setSelectedCuisine(selectedCuisine)
     setSelectedBorough(selectedBorough)
     debouncedSearch(searchTerm)

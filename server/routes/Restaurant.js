@@ -24,4 +24,11 @@ export default async function routes(fastify, options) {
       return await restaurantController.getFacetedSearchResults(request, reply)
     }
   )
+
+  fastify.get(
+    '/facetSearch/facet/:term/:cuisine/:borough', async (request, reply) => {
+      console.debug("executing getFacetedSearchResults")
+      return await restaurantController.fuzzyAutocompleteSearchOnNameWithFacets(request, reply)
+    }
+  )
 }

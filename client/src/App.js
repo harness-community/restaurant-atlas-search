@@ -26,10 +26,6 @@ function App() {
   const [selectedBorough, setSelectedBorough] = useState([])
   const [facetResults, setFacetResults] = useState([])
 
-  React.useEffect(() => {
-    console.log('App.js useEffect triggered ' + selectedCuisine)
-  })
-
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
